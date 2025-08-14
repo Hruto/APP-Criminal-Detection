@@ -86,7 +86,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     : const Text('Sign In'),
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -95,7 +95,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 InkWell(
                   onTap: () => context.go('/sign-up'),
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    padding: EdgeInsets.symmetric(vertical: 0.0),
                     child: Text('Sign Up',
                         style: TextStyle(
                           fontSize: 12.5,

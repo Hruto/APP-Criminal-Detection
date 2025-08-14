@@ -37,7 +37,7 @@ class AuthScaffold extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: c.maxHeight),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: maxW < 480 ? 16 : hPad),
+                  padding: EdgeInsets.zero,
                   child: Stack(
                     children: [
                       // HEADER BIRU + LOGO
@@ -52,10 +52,10 @@ class AuthScaffold extends StatelessWidget {
                         ),
                         alignment: Alignment.topCenter,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 36),
+                          padding: const EdgeInsets.only(top: 8),
                           child: Image.asset(
                             'assets/images/logo_anomeye.png',
-                            height: 72,
+                            height: 160,
                             // supaya tidak crash saat asset belum ada
                             errorBuilder: (_, __, ___) => const Icon(
                               Icons.remove_red_eye,
@@ -108,8 +108,8 @@ class AuthScaffold extends StatelessWidget {
                                 if(showTabs) ...[
                                   // TAB
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
-                                    const SizedBox(width: 60),
                                     InkWell(
                                       onTap: onTapSignIn,
                                       child: _TabLabel(
@@ -117,7 +117,6 @@ class AuthScaffold extends StatelessWidget {
                                         isActive: activeTab == 0,
                                       ),
                                     ),
-                                    const SizedBox(width: 120),
                                     InkWell(
                                       onTap: onTapSignUp,
                                       child: _TabLabel(

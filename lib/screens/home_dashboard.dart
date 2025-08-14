@@ -14,6 +14,7 @@ class HomeDashboard extends ConsumerWidget {
     final cameras = ref.watch(camerasProvider);
 
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 206, 208, 209),
       appBar: AppBar(
         title: const Text('AnomEye'),
         actions: [
@@ -33,7 +34,7 @@ class HomeDashboard extends ConsumerWidget {
                 title: 'Live Cameras',
                 onSeeAll: () => ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('See all cameras tapped')),
-                ),
+                ), titlewhite: '',
               ),
               const SizedBox(height: 8),
               GridView.builder(
@@ -57,7 +58,7 @@ class HomeDashboard extends ConsumerWidget {
               const SizedBox(height: 16),
               SectionHeader(
                 title: 'Recent Alerts',
-                onSeeAll: () => context.push('/history'),
+                onSeeAll: () => context.push('/history'), titlewhite: '',
               ),
               const SizedBox(height: 8),
               Card(
@@ -76,15 +77,31 @@ class HomeDashboard extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: NavigationBar(
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.history_outlined), label: 'History'),
-          NavigationDestination(icon: Icon(Icons.settings_outlined), label: 'Settings'),
+        destinations: [
+          const NavigationDestination(
+              icon: Icon(Icons.home_outlined), label: 'Home'),
+          const NavigationDestination(
+              icon: Icon(Icons.history_outlined), label: 'History'),
+
+          // <-- Ganti dengan logo dari assets
+          NavigationDestination(
+            icon: Image.asset(
+              'assets/images/logo_anomeye.png',
+              width: 24,
+              height: 24,
+            ),
+            selectedIcon: Image.asset(
+              'assets/images/logo_anomeye.png',
+              width: 28, height: 28, // sedikit lebih besar saat terpilih
+            ),
+            label: 'Account',
+            tooltip: 'Account',
+          ),
         ],
         onDestinationSelected: (i) {
           if (i == 0) context.go('/');
           if (i == 1) context.go('/history');
-          if (i == 2) context.go('/settings');
+          if (i == 2) context.go('/account');
         },
         selectedIndex: 0,
       ),

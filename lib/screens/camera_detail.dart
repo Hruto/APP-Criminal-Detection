@@ -22,7 +22,7 @@ class CameraDetailScreen extends ConsumerWidget {
               aspectRatio: 16/9,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: const Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,

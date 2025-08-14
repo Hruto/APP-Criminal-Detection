@@ -97,6 +97,30 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Already have an account.",
+                  style: TextStyle(fontSize: 12.5, color: Colors.black54),
+                ),
+                InkWell(
+                  onTap: () => context.go('/sign-in'),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6.0),
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w700,
+                        color: AuthTheme.primaryBlue,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
