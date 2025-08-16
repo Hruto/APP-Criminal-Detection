@@ -101,7 +101,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Already have an account.",
+                  'Already have an account.',
                   style: TextStyle(fontSize: 12.5, color: Colors.black54),
                 ),
                 InkWell(

@@ -35,12 +35,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/sign-in',
         name: 'sign-in',
-        builder: (context, state) => const SignInScreen(),
+        pageBuilder: (context, state) => const NoTransitionPage(child: SignInScreen()),
       ),
       GoRoute(
         path: '/',
         name: 'home',
-        builder: (context, state) => const HomeDashboard(),
+        pageBuilder: (context, state) => const NoTransitionPage(child: HomeDashboard()),
       ),
       GoRoute(
         path: '/camera/:id',
@@ -57,18 +57,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/sign-up',
         name: 'sign-up',
-        pageBuilder: (context, state) => _slidePage(
-          state: state,
-          child: const SignUpScreen(),
-        ),
+        pageBuilder: (context, state) => const NoTransitionPage(child: SignUpScreen())
       ),
       GoRoute(
         path: '/history',
         name: 'history',
-        pageBuilder: (context, state) => _slidePage(
-          state: state,
-          child: const AnomalyHistoryScreen(),
-        ),
+        pageBuilder: (context, state) => const NoTransitionPage(child: AnomalyHistoryScreen())
       ),
       GoRoute(
         path: '/settings',
@@ -78,10 +72,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/account',
         name: 'account',
-        pageBuilder: (context, state) => _slidePage(
-          state: state,
-          child: const AccountScreen(),
-        ),
+        pageBuilder: (context, state) => const NoTransitionPage(child: AccountScreen())
       ),
     ],
     redirect: (context, state) {

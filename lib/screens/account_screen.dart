@@ -7,14 +7,18 @@ class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    const blue = Color.fromARGB(255, 200, 200, 200); // biru utama
+  Widget build(BuildContext context, WidgetRef ref) { // biru utama
     const bg = Color(0xFFF4F7FA);   // latar belakang lembut
 
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
-        title: const Text('AnomEye'),
+        backgroundColor: const Color(0xFF024670),
+        centerTitle: true,
+        title: SizedBox(
+          height: 50,
+          child: Image.asset('assets/images/anomeye.png',fit: BoxFit.contain,),
+        ),
         actions: [
           IconButton(
             onPressed: () => context.push('/settings'),
@@ -32,7 +36,7 @@ class AccountScreen extends ConsumerWidget {
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
               decoration: BoxDecoration(
-                color: blue,
+                color: Color(0xFF024670),
                 borderRadius: BorderRadius.circular(28),
               ),
               child: Column(
@@ -68,7 +72,6 @@ class AccountScreen extends ConsumerWidget {
                       child: const Text(
                         'Change password?',
                         style: TextStyle(
-                          decoration: TextDecoration.underline,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -104,34 +107,53 @@ class AccountScreen extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: NavigationBar(
-        destinations: [
-          const NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-          const NavigationDestination(icon: Icon(Icons.history_outlined), label: 'History'),
-
-          // Logo dari assets
-          NavigationDestination(
-            icon: Image.asset('assets/images/logo_anomeye.png', width: 24, height: 24),
-            selectedIcon: Image.asset('assets/images/logo_anomeye.png', width: 28, height: 28),
-            label: 'Account',
-            tooltip: 'Account',
-          ),
-        ],
+      bottomNavigationBar: NavigationBarTheme(
+        data: const NavigationBarThemeData(
+          backgroundColor: Color(0xFF024670),
+          indicatorColor: Colors.white12,
+          iconTheme:
+              MaterialStatePropertyAll(IconThemeData(color: Colors.white)),
+          labelTextStyle:
+              MaterialStatePropertyAll(TextStyle(color: Colors.white)),
+        ),
+        child: NavigationBar(
+          selectedIndex: 0,
+          destinations: [
+            const NavigationDestination(
+              icon: Icon(Icons.home_outlined, color: Colors.white),
+              selectedIcon: Icon(Icons.home, color: Colors.white),
+              label: 'Home',
+            ),
+            const NavigationDestination(
+              icon: Icon(Icons.history_outlined, color: Colors.white),
+              selectedIcon: Icon(Icons.history, color: Colors.white),
+              label: 'History',
+            ),
+            NavigationDestination(
+              icon: Image.asset(
+                'assets/images/logo_anomeye.png',
+                width: 28,
+                height: 28,
+                color: Colors.white, // tint putih untuk asset
+                colorBlendMode: BlendMode.srcIn,
+              ),
+              selectedIcon: Image.asset(
+                'assets/images/logo_anomeye.png',
+                width: 30,
+                height: 30,
+                color: Colors.white,
+                colorBlendMode: BlendMode.srcIn,
+              ),
+              label: 'Account',
+              tooltip: 'Account',
+            ),
+          ],
         onDestinationSelected: (i) {
           if (i == 0) context.go('/');
           if (i == 1) context.go('/history');
           if (i == 2) context.go('/account');
         },
-        selectedIndex: 2,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Quick sign-out demo
-          ref.read(authStateProvider.notifier).state = false;
-          context.go('/sign-in');
-        },
-        label: const Text('Sign out'),
-        icon: const Icon(Icons.logout),
       ),
     );
   }

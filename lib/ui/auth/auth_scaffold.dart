@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'auth_theme.dart';
+import 'package:anomeye/ui/auth/auth_theme.dart';
 
 class AuthScaffold extends StatelessWidget {
   const AuthScaffold({
@@ -131,7 +131,7 @@ class AuthScaffold extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 Stack(
                                   children: [
-                                    Container(height: 2, color: const Color(0xFFE5EDF2)),
+                                    Container(height: 2, color: const Color(0xFF024670)),
                                     Align(
                                       alignment: activeTab == 0
                                           ? Alignment.centerLeft

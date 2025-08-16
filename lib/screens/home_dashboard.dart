@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:anomeye/providers/camera_provider.dart';
 import 'package:anomeye/widgets/section_header.dart';
 import 'package:anomeye/widgets/camera_card.dart';
-import 'package:anomeye/providers/auth_provider.dart';
 
 class HomeDashboard extends ConsumerWidget {
   const HomeDashboard({super.key});
@@ -14,9 +13,15 @@ class HomeDashboard extends ConsumerWidget {
     final cameras = ref.watch(camerasProvider);
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 206, 208, 209),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        title: const Text('AnomEye'),
+        backgroundColor: const Color(0xFF024670),
+        //automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: SizedBox(
+          height: 50,
+          child: Image.asset('assets/images/anomeye.png',fit: BoxFit.contain,),
+        ),
         actions: [
           IconButton(
             onPressed: () => context.push('/settings'),
@@ -76,43 +81,53 @@ class HomeDashboard extends ConsumerWidget {
           ),
         ),
       ),
-      bottomNavigationBar: NavigationBar(
-        destinations: [
-          const NavigationDestination(
-              icon: Icon(Icons.home_outlined), label: 'Home'),
-          const NavigationDestination(
-              icon: Icon(Icons.history_outlined), label: 'History'),
-
-          // <-- Ganti dengan logo dari assets
-          NavigationDestination(
-            icon: Image.asset(
-              'assets/images/logo_anomeye.png',
-              width: 24,
-              height: 24,
+      bottomNavigationBar: NavigationBarTheme(
+        data: const NavigationBarThemeData(
+          backgroundColor: Color(0xFF024670),
+          indicatorColor: Colors.white12,
+          iconTheme:
+              MaterialStatePropertyAll(IconThemeData(color: Colors.white)),
+          labelTextStyle:
+              MaterialStatePropertyAll(TextStyle(color: Colors.white)),
+        ),
+        child: NavigationBar(
+          selectedIndex: 0,
+          destinations: [
+            const NavigationDestination(
+              icon: Icon(Icons.home_outlined, color: Colors.white),
+              selectedIcon: Icon(Icons.home, color: Colors.white),
+              label: 'Home',
             ),
-            selectedIcon: Image.asset(
-              'assets/images/logo_anomeye.png',
-              width: 28, height: 28, // sedikit lebih besar saat terpilih
+            const NavigationDestination(
+              icon: Icon(Icons.history_outlined, color: Colors.white),
+              selectedIcon: Icon(Icons.history, color: Colors.white),
+              label: 'History',
             ),
-            label: 'Account',
-            tooltip: 'Account',
-          ),
-        ],
-        onDestinationSelected: (i) {
-          if (i == 0) context.go('/');
-          if (i == 1) context.go('/history');
-          if (i == 2) context.go('/account');
-        },
-        selectedIndex: 0,
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Quick sign-out demo
-          ref.read(authStateProvider.notifier).state = false;
-          context.go('/sign-in');
-        },
-        label: const Text('Sign out'),
-        icon: const Icon(Icons.logout),
+            NavigationDestination(
+              icon: Image.asset(
+                'assets/images/logo_anomeye.png',
+                width: 28,
+                height: 28,
+                color: Colors.white, // tint putih untuk asset
+                colorBlendMode: BlendMode.srcIn,
+              ),
+              selectedIcon: Image.asset(
+                'assets/images/logo_anomeye.png',
+                width: 30,
+                height: 30,
+                color: Colors.white,
+                colorBlendMode: BlendMode.srcIn,
+              ),
+              label: 'Account',
+              tooltip: 'Account',
+            ),
+          ],
+          onDestinationSelected: (i) {
+            if (i == 0) context.go('/');
+            if (i == 1) context.go('/history');
+            if (i == 2) context.go('/account');
+          },
+        ),
       ),
     );
   }

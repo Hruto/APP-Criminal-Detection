@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';              
 import 'package:anomeye/providers/camera_provider.dart';
 import 'package:anomeye/widgets/anomaly_tile.dart';
-import 'package:anomeye/providers/auth_provider.dart';
 
 class AnomalyHistoryScreen extends ConsumerWidget {
   const AnomalyHistoryScreen({super.key});
@@ -13,7 +12,12 @@ class AnomalyHistoryScreen extends ConsumerWidget {
     final anomalies = ref.watch(anomaliesProvider);
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Anomaly History'),
+          backgroundColor: const Color(0xFF024670),
+          centerTitle: true,
+        title: SizedBox(
+          height: 50,
+          child: Image.asset('assets/images/anomeye.png',fit: BoxFit.contain,),
+        ),
           actions: [
             IconButton(onPressed: () => context.push('/settings')
             , icon: const Icon(Icons.settings_outlined),)
@@ -25,43 +29,53 @@ class AnomalyHistoryScreen extends ConsumerWidget {
           separatorBuilder: (_, __) => const SizedBox(height: 4),
           itemBuilder: (context, i) => AnomalyTile(anomaly: anomalies[i]),
         ),
-        bottomNavigationBar: NavigationBar(
-        destinations: [
-          const NavigationDestination(
-              icon: Icon(Icons.home_outlined), label: 'Home'),
-          const NavigationDestination(
-              icon: Icon(Icons.history_outlined), label: 'History'),
-
-          // <-- Ganti dengan logo dari assets
-          NavigationDestination(
-            icon: Image.asset(
-              'assets/images/logo_anomeye.png',
-              width: 24,
-              height: 24,
+        bottomNavigationBar: NavigationBarTheme(
+        data: const NavigationBarThemeData(
+          backgroundColor: Color(0xFF024670),
+          indicatorColor: Colors.white12,
+          iconTheme:
+              MaterialStatePropertyAll(IconThemeData(color: Colors.white)),
+          labelTextStyle:
+              MaterialStatePropertyAll(TextStyle(color: Colors.white)),
+        ),
+        child: NavigationBar(
+          selectedIndex: 0,
+          destinations: [
+            const NavigationDestination(
+              icon: Icon(Icons.home_outlined, color: Colors.white),
+              selectedIcon: Icon(Icons.home, color: Colors.white),
+              label: 'Home',
             ),
-            selectedIcon: Image.asset(
-              'assets/images/logo_anomeye.png',
-              width: 28, height: 28, // sedikit lebih besar saat terpilih
+            const NavigationDestination(
+              icon: Icon(Icons.history_outlined, color: Colors.white),
+              selectedIcon: Icon(Icons.history, color: Colors.white),
+              label: 'History',
             ),
-            label: 'Account',
-            tooltip: 'Account',
-          ),
-        ],
+            NavigationDestination(
+              icon: Image.asset(
+                'assets/images/logo_anomeye.png',
+                width: 28,
+                height: 28,
+                color: Colors.white, // tint putih untuk asset
+                colorBlendMode: BlendMode.srcIn,
+              ),
+              selectedIcon: Image.asset(
+                'assets/images/logo_anomeye.png',
+                width: 30,
+                height: 30,
+                color: Colors.white,
+                colorBlendMode: BlendMode.srcIn,
+              ),
+              label: 'Account',
+              tooltip: 'Account',
+            ),
+          ],
         onDestinationSelected: (i) {
           if (i == 0) context.go('/');
           if (i == 1) context.go('/history');
           if (i == 2) context.go('/account');
         },
-        selectedIndex: 1,
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Quick sign-out demo
-          ref.read(authStateProvider.notifier).state = false;
-          context.go('/sign-in');
-        },
-        label: const Text('Sign out'),
-        icon: const Icon(Icons.logout),
+        ),
       ),
       );
   }
