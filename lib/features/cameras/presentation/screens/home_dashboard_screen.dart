@@ -4,24 +4,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:anomeye/shared/widgets/section_header.dart';
 import 'package:anomeye/features/cameras/presentation/widgets/camera_card.dart';
+import 'package:anomeye/shared/widgets/app_bottom_nav_bar.dart';
 
-// Create a provider to track the current navigation index
-final currentNavIndexProvider = StateProvider<int>((ref) => 0);
-
-class HomeDashboard extends ConsumerWidget {
+class HomeDashboard extends ConsumerStatefulWidget {
   const HomeDashboard({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeDashboard> createState() => _HomeDashboardState();
+}
+
+class _HomeDashboardState extends ConsumerState<HomeDashboard> {
+  @override
+  void initState() {
+    super.initState();
+    // Set the current navigation index to 0 (Home) when this screen is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(currentNavIndexProvider.notifier).state = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final cameras = ref.watch(camerasListProvider);
-    // Get the current navigation index
-    final currentIndex = ref.watch(currentNavIndexProvider);
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         backgroundColor: const Color(0xFF024670),
-        //automaticallyImplyLeading: false,
         centerTitle: true,
         title: SizedBox(
           height: 50,
@@ -59,8 +68,7 @@ class HomeDashboard extends ConsumerWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
-                  childAspectRatio:
-                      0.8, // Adjust this value to give more vertical space
+                  childAspectRatio: 0.8, // Adjusted for more vertical space
                 ),
                 itemBuilder: (context, index) {
                   final c = cameras.value?[index];
@@ -92,66 +100,7 @@ class HomeDashboard extends ConsumerWidget {
           ),
         ),
       ),
-      bottomNavigationBar: NavigationBarTheme(
-        data: const NavigationBarThemeData(
-          backgroundColor: Color(0xFF024670),
-          indicatorColor: Colors.white12,
-          iconTheme:
-              MaterialStatePropertyAll(IconThemeData(color: Colors.white)),
-          labelTextStyle:
-              MaterialStatePropertyAll(TextStyle(color: Colors.white)),
-        ),
-        child: NavigationBar(
-          selectedIndex: currentIndex,
-          destinations: [
-            const NavigationDestination(
-              icon: Icon(Icons.home_outlined, color: Colors.white),
-              selectedIcon: Icon(Icons.home, color: Colors.white),
-              label: 'Home',
-            ),
-            const NavigationDestination(
-              icon: Icon(Icons.history_outlined, color: Colors.white),
-              selectedIcon: Icon(Icons.history, color: Colors.white),
-              label: 'History',
-            ),
-            NavigationDestination(
-              icon: Image.asset(
-                'assets/images/logo_anomeye.png',
-                width: 28,
-                height: 28,
-                color: Colors.white, // tint putih untuk asset
-                colorBlendMode: BlendMode.srcIn,
-              ),
-              selectedIcon: Image.asset(
-                'assets/images/logo_anomeye.png',
-                width: 30,
-                height: 30,
-                color: Colors.white,
-                colorBlendMode: BlendMode.srcIn,
-              ),
-              label: 'Account',
-              tooltip: 'Account',
-            ),
-          ],
-          onDestinationSelected: (index) {
-            // Update the current index
-            ref.read(currentNavIndexProvider.notifier).state = index;
-
-            // Navigate based on the selected index
-            switch (index) {
-              case 0:
-                context.go('/');
-                break;
-              case 1:
-                context.go('/history');
-                break;
-              case 2:
-                context.go('/account');
-                break;
-            }
-          },
-        ),
-      ),
+      bottomNavigationBar: const AppBottomNavBar(),
     );
   }
 }
