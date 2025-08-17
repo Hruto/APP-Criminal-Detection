@@ -1,3 +1,4 @@
+import 'package:anomeye/features/anomalies/presentation/screens/anomaly_detail_screen.dart';
 import 'package:anomeye/features/anomalies/presentation/screens/anomaly_history_screen.dart';
 import 'package:anomeye/features/auth/presentation/screens/account_screen.dart';
 import 'package:anomeye/features/auth/presentation/screens/forgot_password_screen.dart';
@@ -84,6 +85,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'live',
         builder: (context, state) =>
             LivePlayerScreen(cameraId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/anomaly/:id',
+        name: 'anomaly-detail',
+        pageBuilder: (_, s) {
+          final id = s.pathParameters['id']!;
+          return _slidePage(
+              state: s, child: AnomalyDetailScreen(anomalyId: id));
+        },
       ),
     ],
     redirect: (_, __) => null,

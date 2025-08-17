@@ -1,6 +1,7 @@
 import 'package:anomeye/features/anomalies/domain/anomaly.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 class AnomalyTile extends StatelessWidget {
   final Anomaly anomaly;
@@ -24,6 +25,7 @@ class AnomalyTile extends StatelessWidget {
       title: Text(anomaly.label),
       subtitle: Text(dt),
       trailing: Text('${(anomaly.score * 100).toStringAsFixed(0)}%'),
+      onTap: () => context.push('/anomaly/${anomaly.id}'),
     );
   }
 }
