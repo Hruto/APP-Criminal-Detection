@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anomeye/theme/app_theme.dart';
-import 'package:anomeye/router/app_router.dart';
+import 'package:anomeye/app/theme/app_theme.dart';
+import 'package:anomeye/app/router.dart';
 
 void main() {
   runApp(const ProviderScope(child: AnomEyeApp()));
