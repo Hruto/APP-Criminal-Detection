@@ -1,12 +1,12 @@
 import 'package:anomeye/features/auth/domain/auth_repo.dart';
 import 'package:anomeye/features/auth/domain/auth_state.dart';
-import 'package:anomeye/features/auth/presentation/screens/auth_controller.dart';
+import 'package:anomeye/features/auth/presentation/auth_controller.dart';
 import 'package:anomeye/features/auth/storage/secure_token_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'env.dart';
 import '../core/network/auth_interceptor.dart';
-import '../features//auth/domain/auth_repo_fake.dart';
+import '../features/auth/domain/auth_repo_fake.dart';
 
 final envProvider = Provider<AppEnv>((_) => defaultEnv);
 
@@ -14,12 +14,16 @@ final tokenStoreProvider =
     Provider<SecureTokenStore>((_) => SecureTokenStore());
 
 final authRepoProvider = Provider<AuthRepo>((ref) {
-  return AuthRepoFake(ref.read(tokenStoreProvider));
+  final store = ref.watch(tokenStoreProvider);
+  return AuthRepoFake(store); // nanti ganti ke impl API
 });
 
 final authStateProvider =
     StateNotifierProvider<AuthController, AuthState>((ref) {
-  return AuthController(ref.read(authRepoProvider));
+  final repo = ref.watch(authRepoProvider);
+  final c = AuthController(repo, ref);
+  c.bootstrap();
+  return c;
 });
 
 final dioProvider = Provider<Dio>((ref) {

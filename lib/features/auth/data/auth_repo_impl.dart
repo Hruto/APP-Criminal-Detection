@@ -7,6 +7,7 @@ import 'package:anomeye/features/auth/storage/secure_token_store.dart';
 class AuthRepoImpl implements AuthRepo {
   final AuthApi api;
   final SecureTokenStore store;
+  String? _fcm;
   AuthRepoImpl(this.api, this.store);
 
   @override
@@ -47,5 +48,17 @@ class AuthRepoImpl implements AuthRepo {
     );
     await store.save(token);
     return AuthState.authenticated(token: token, user: user);
+  }
+
+  @override
+  Future<void> upsertFcmToken(String token) async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    _fcm = token; // simpan lokal saja (fake)
+  }
+
+  @override
+  Future<void> deleteFcmToken() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    _fcm = null;
   }
 }

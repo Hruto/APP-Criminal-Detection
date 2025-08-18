@@ -8,7 +8,8 @@ class AuthUser with _$AuthUser {
     required int id,
     required String email,
     required int companyId,
-    required String role, // 'user' | 'company_admin'
+    required String role,
+    String? fcmToken,
   }) = _AuthUser;
 
   factory AuthUser.fromJson(Map<String, dynamic> json) =>
