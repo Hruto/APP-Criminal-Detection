@@ -22,12 +22,12 @@ class AuthApi {
   Future<(String, AuthUser)> signUp({
     required String email,
     required String password,
-    required String companyName,
+    required String companyId,
   }) async {
     final r = await _dio.post('/api/auth/register', data: {
       'email': email,
       'password': password,
-      'company_name': companyName,
+      'companyId': companyId,
     });
     final token = r.data['token'] as String;
     final user = AuthUser.fromJson(r.data['user']);

@@ -1,3 +1,4 @@
+import 'package:anomeye/app/di.dart';
 import 'package:anomeye/features/anomalies/presentation/screens/anomaly_detail_screen.dart';
 import 'package:anomeye/features/anomalies/presentation/screens/anomaly_history_screen.dart';
 import 'package:anomeye/features/auth/presentation/screens/account_screen.dart';
@@ -33,6 +34,7 @@ CustomTransitionPage<T> _slidePage<T>({
 }
 
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final auth = ref.watch(authStateProvider);
   return GoRouter(
     initialLocation: '/sign-in',
     routes: [
@@ -96,6 +98,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
     ],
-    redirect: (_, __) => null,
+    redirect: (context, state) {
+      final loggingIn =
+          state.fullPath == '/sign-in' || state.fullPath == '/sign-up';
+
+      final authed = auth.maybeWhen(
+        authenticated: (_, __) => true,
+        orElse: () => false,
+      );
+
+      if (!authed && !loggingIn) return '/sign-in';
+      if (authed && loggingIn) return '/';
+      return null;
+    },
   );
 });

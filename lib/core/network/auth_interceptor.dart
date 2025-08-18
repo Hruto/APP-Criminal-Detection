@@ -1,6 +1,6 @@
+import 'package:anomeye/app/di.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../features/auth/presentation/screens/auth_controller.dart';
 
 class AuthInterceptor extends Interceptor {
   final Ref ref;

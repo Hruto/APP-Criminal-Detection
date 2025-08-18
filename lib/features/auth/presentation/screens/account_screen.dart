@@ -1,3 +1,4 @@
+import 'package:anomeye/app/di.dart';
 import 'package:anomeye/shared/widgets/app_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -92,7 +93,6 @@ class AccountScreen extends ConsumerWidget {
                     child: OutlinedButton(
                       onPressed: () {
                         ref.read(authStateProvider.notifier).signOut();
-                        context.go('/sign-in');
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.white,

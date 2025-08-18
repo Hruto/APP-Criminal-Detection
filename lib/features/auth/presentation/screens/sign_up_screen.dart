@@ -1,3 +1,4 @@
+import 'package:anomeye/app/di.dart';
 import 'package:anomeye/features/auth/presentation/screens/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,16 +37,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       return;
     }
     try {
-      await ref.read(authStateProvider.notifier).signUp(
-            _email.text,
-            _password.text,
-            'company',
-          );
+      final ctrl = ref.read(authStateProvider.notifier);
+      await ctrl.signUp(_email.text, _password.text, 'PT. Jaya Abadi');
     } catch (e) {
       setState(() => _loading = false);
       return;
     }
-    if (mounted) context.go('/');
   }
 
   @override

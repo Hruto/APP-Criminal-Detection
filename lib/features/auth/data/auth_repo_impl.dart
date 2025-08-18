@@ -15,8 +15,8 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<AuthState> restore() async {
-    final t = await store.readToken();
+  Future<AuthState> readToken() async {
+    final t = await store.read();
     if (t == null) return const AuthState.unauthenticated();
     // TODO: optionally call /me untuk dapat user
     return AuthState.authenticated(
@@ -30,7 +30,7 @@ class AuthRepoImpl implements AuthRepo {
   Future<AuthState> signIn(
       {required String email, required String password}) async {
     final (token, user) = await api.signIn(email, password);
-    await store.saveToken(token);
+    await store.save(token);
     return AuthState.authenticated(token: token, user: user);
   }
 
@@ -38,14 +38,14 @@ class AuthRepoImpl implements AuthRepo {
   Future<AuthState> signUp(
       {required String email,
       required String password,
-      required String companyName}) async {
+      required String companyId}) async {
     // TODO: implement signUp
     final (token, user) = await api.signUp(
       email: email,
       password: password,
-      companyName: companyName,
+      companyId: companyId,
     );
-    await store.saveToken(token);
+    await store.save(token);
     return AuthState.authenticated(token: token, user: user);
   }
 }

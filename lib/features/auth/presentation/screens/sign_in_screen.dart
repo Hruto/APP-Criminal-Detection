@@ -1,3 +1,4 @@
+import 'package:anomeye/app/di.dart';
 import 'package:anomeye/features/auth/presentation/screens/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,11 +30,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     await Future.delayed(const Duration(milliseconds: 600));
-    await ref.read(authStateProvider.notifier).signIn(
-          _email.text,
-          _password.text,
-        );
-    if (mounted) context.go('/');
+    final ctrl = ref.read(authStateProvider.notifier);
+    await ctrl.signIn(_email.text, _password.text);
   }
 
   @override
