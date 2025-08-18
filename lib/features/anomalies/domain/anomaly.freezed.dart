@@ -20,14 +20,15 @@ Anomaly _$AnomalyFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Anomaly {
-  String get id => throw _privateConstructorUsedError;
-  String get cameraId => throw _privateConstructorUsedError;
-  DateTime get time => throw _privateConstructorUsedError;
-  String get label => throw _privateConstructorUsedError;
-  double get score => throw _privateConstructorUsedError;
-  String? get clipUrl =>
-      throw _privateConstructorUsedError; // evidence video (presigned)
-  String? get thumbnailUrl => throw _privateConstructorUsedError;
+  String get id =>
+      throw _privateConstructorUsedError; // pakai String agar fleksibel (int/uuid)
+  String get cameraId => throw _privateConstructorUsedError; // "cam1"
+  String get anomalyType =>
+      throw _privateConstructorUsedError; // "intrusion", dst
+  double get confidence => throw _privateConstructorUsedError; // 0.0 - 1.0
+  String? get videoClipUrl =>
+      throw _privateConstructorUsedError; // optional bukti
+  DateTime get reportedAt => throw _privateConstructorUsedError;
 
   /// Serializes this Anomaly to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,11 +47,10 @@ abstract class $AnomalyCopyWith<$Res> {
   $Res call(
       {String id,
       String cameraId,
-      DateTime time,
-      String label,
-      double score,
-      String? clipUrl,
-      String? thumbnailUrl});
+      String anomalyType,
+      double confidence,
+      String? videoClipUrl,
+      DateTime reportedAt});
 }
 
 /// @nodoc
@@ -70,11 +70,10 @@ class _$AnomalyCopyWithImpl<$Res, $Val extends Anomaly>
   $Res call({
     Object? id = null,
     Object? cameraId = null,
-    Object? time = null,
-    Object? label = null,
-    Object? score = null,
-    Object? clipUrl = freezed,
-    Object? thumbnailUrl = freezed,
+    Object? anomalyType = null,
+    Object? confidence = null,
+    Object? videoClipUrl = freezed,
+    Object? reportedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -85,26 +84,22 @@ class _$AnomalyCopyWithImpl<$Res, $Val extends Anomaly>
           ? _value.cameraId
           : cameraId // ignore: cast_nullable_to_non_nullable
               as String,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      label: null == label
-          ? _value.label
-          : label // ignore: cast_nullable_to_non_nullable
+      anomalyType: null == anomalyType
+          ? _value.anomalyType
+          : anomalyType // ignore: cast_nullable_to_non_nullable
               as String,
-      score: null == score
-          ? _value.score
-          : score // ignore: cast_nullable_to_non_nullable
+      confidence: null == confidence
+          ? _value.confidence
+          : confidence // ignore: cast_nullable_to_non_nullable
               as double,
-      clipUrl: freezed == clipUrl
-          ? _value.clipUrl
-          : clipUrl // ignore: cast_nullable_to_non_nullable
+      videoClipUrl: freezed == videoClipUrl
+          ? _value.videoClipUrl
+          : videoClipUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      thumbnailUrl: freezed == thumbnailUrl
-          ? _value.thumbnailUrl
-          : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      reportedAt: null == reportedAt
+          ? _value.reportedAt
+          : reportedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 }
@@ -119,11 +114,10 @@ abstract class _$$AnomalyImplCopyWith<$Res> implements $AnomalyCopyWith<$Res> {
   $Res call(
       {String id,
       String cameraId,
-      DateTime time,
-      String label,
-      double score,
-      String? clipUrl,
-      String? thumbnailUrl});
+      String anomalyType,
+      double confidence,
+      String? videoClipUrl,
+      DateTime reportedAt});
 }
 
 /// @nodoc
@@ -141,11 +135,10 @@ class __$$AnomalyImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? cameraId = null,
-    Object? time = null,
-    Object? label = null,
-    Object? score = null,
-    Object? clipUrl = freezed,
-    Object? thumbnailUrl = freezed,
+    Object? anomalyType = null,
+    Object? confidence = null,
+    Object? videoClipUrl = freezed,
+    Object? reportedAt = null,
   }) {
     return _then(_$AnomalyImpl(
       id: null == id
@@ -156,26 +149,22 @@ class __$$AnomalyImplCopyWithImpl<$Res>
           ? _value.cameraId
           : cameraId // ignore: cast_nullable_to_non_nullable
               as String,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      label: null == label
-          ? _value.label
-          : label // ignore: cast_nullable_to_non_nullable
+      anomalyType: null == anomalyType
+          ? _value.anomalyType
+          : anomalyType // ignore: cast_nullable_to_non_nullable
               as String,
-      score: null == score
-          ? _value.score
-          : score // ignore: cast_nullable_to_non_nullable
+      confidence: null == confidence
+          ? _value.confidence
+          : confidence // ignore: cast_nullable_to_non_nullable
               as double,
-      clipUrl: freezed == clipUrl
-          ? _value.clipUrl
-          : clipUrl // ignore: cast_nullable_to_non_nullable
+      videoClipUrl: freezed == videoClipUrl
+          ? _value.videoClipUrl
+          : videoClipUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      thumbnailUrl: freezed == thumbnailUrl
-          ? _value.thumbnailUrl
-          : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      reportedAt: null == reportedAt
+          ? _value.reportedAt
+          : reportedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -186,34 +175,35 @@ class _$AnomalyImpl implements _Anomaly {
   const _$AnomalyImpl(
       {required this.id,
       required this.cameraId,
-      required this.time,
-      required this.label,
-      required this.score,
-      this.clipUrl,
-      this.thumbnailUrl});
+      required this.anomalyType,
+      required this.confidence,
+      this.videoClipUrl,
+      required this.reportedAt});
 
   factory _$AnomalyImpl.fromJson(Map<String, dynamic> json) =>
       _$$AnomalyImplFromJson(json);
 
   @override
   final String id;
+// pakai String agar fleksibel (int/uuid)
   @override
   final String cameraId;
+// "cam1"
   @override
-  final DateTime time;
+  final String anomalyType;
+// "intrusion", dst
   @override
-  final String label;
+  final double confidence;
+// 0.0 - 1.0
   @override
-  final double score;
+  final String? videoClipUrl;
+// optional bukti
   @override
-  final String? clipUrl;
-// evidence video (presigned)
-  @override
-  final String? thumbnailUrl;
+  final DateTime reportedAt;
 
   @override
   String toString() {
-    return 'Anomaly(id: $id, cameraId: $cameraId, time: $time, label: $label, score: $score, clipUrl: $clipUrl, thumbnailUrl: $thumbnailUrl)';
+    return 'Anomaly(id: $id, cameraId: $cameraId, anomalyType: $anomalyType, confidence: $confidence, videoClipUrl: $videoClipUrl, reportedAt: $reportedAt)';
   }
 
   @override
@@ -224,18 +214,20 @@ class _$AnomalyImpl implements _Anomaly {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.cameraId, cameraId) ||
                 other.cameraId == cameraId) &&
-            (identical(other.time, time) || other.time == time) &&
-            (identical(other.label, label) || other.label == label) &&
-            (identical(other.score, score) || other.score == score) &&
-            (identical(other.clipUrl, clipUrl) || other.clipUrl == clipUrl) &&
-            (identical(other.thumbnailUrl, thumbnailUrl) ||
-                other.thumbnailUrl == thumbnailUrl));
+            (identical(other.anomalyType, anomalyType) ||
+                other.anomalyType == anomalyType) &&
+            (identical(other.confidence, confidence) ||
+                other.confidence == confidence) &&
+            (identical(other.videoClipUrl, videoClipUrl) ||
+                other.videoClipUrl == videoClipUrl) &&
+            (identical(other.reportedAt, reportedAt) ||
+                other.reportedAt == reportedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, cameraId, time, label, score, clipUrl, thumbnailUrl);
+  int get hashCode => Object.hash(runtimeType, id, cameraId, anomalyType,
+      confidence, videoClipUrl, reportedAt);
 
   /// Create a copy of Anomaly
   /// with the given fields replaced by the non-null parameter values.
@@ -257,28 +249,25 @@ abstract class _Anomaly implements Anomaly {
   const factory _Anomaly(
       {required final String id,
       required final String cameraId,
-      required final DateTime time,
-      required final String label,
-      required final double score,
-      final String? clipUrl,
-      final String? thumbnailUrl}) = _$AnomalyImpl;
+      required final String anomalyType,
+      required final double confidence,
+      final String? videoClipUrl,
+      required final DateTime reportedAt}) = _$AnomalyImpl;
 
   factory _Anomaly.fromJson(Map<String, dynamic> json) = _$AnomalyImpl.fromJson;
 
   @override
-  String get id;
+  String get id; // pakai String agar fleksibel (int/uuid)
   @override
-  String get cameraId;
+  String get cameraId; // "cam1"
   @override
-  DateTime get time;
+  String get anomalyType; // "intrusion", dst
   @override
-  String get label;
+  double get confidence; // 0.0 - 1.0
   @override
-  double get score;
+  String? get videoClipUrl; // optional bukti
   @override
-  String? get clipUrl; // evidence video (presigned)
-  @override
-  String? get thumbnailUrl;
+  DateTime get reportedAt;
 
   /// Create a copy of Anomaly
   /// with the given fields replaced by the non-null parameter values.

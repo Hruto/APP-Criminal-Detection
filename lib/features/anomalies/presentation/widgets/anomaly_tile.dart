@@ -1,31 +1,23 @@
 import 'package:anomeye/features/anomalies/domain/anomaly.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:go_router/go_router.dart';
 
 class AnomalyTile extends StatelessWidget {
-  final Anomaly anomaly;
-  const AnomalyTile({super.key, required this.anomaly});
+  const AnomalyTile({super.key, required this.item, this.onTap});
+  final Anomaly item;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final dt = DateFormat('yyyy-MM-dd HH:mm').format(anomaly.time);
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      leading: Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        alignment: Alignment.center,
-        child: const Icon(Icons.warning_amber_rounded),
+      leading: const Icon(Icons.warning_amber_rounded, color: Colors.orange),
+      title: Text(item.anomalyType),
+      subtitle: Text(
+        '${item.cameraId} • ${item.reportedAt}',
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
-      title: Text(anomaly.label),
-      subtitle: Text(dt),
-      trailing: Text('${(anomaly.score * 100).toStringAsFixed(0)}%'),
-      onTap: () => context.push('/anomaly/${anomaly.id}'),
+      trailing: Text('${(item.confidence * 100).toStringAsFixed(0)}%'),
+      onTap: onTap,
     );
   }
 }

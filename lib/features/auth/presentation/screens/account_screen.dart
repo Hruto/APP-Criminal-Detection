@@ -9,28 +9,8 @@ class AccountScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // biru utama
-    const bg = Color(0xFFF4F7FA); // latar belakang lembut
-
     return Scaffold(
-      backgroundColor: bg,
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF024670),
-        centerTitle: true,
-        title: SizedBox(
-          height: 50,
-          child: Image.asset(
-            'assets/images/anomeye.png',
-            fit: BoxFit.contain,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => context.push('/settings'),
-            icon: const Icon(Icons.settings_outlined),
-          ),
-        ],
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Column(

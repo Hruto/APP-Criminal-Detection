@@ -1,3 +1,4 @@
+import 'package:anomeye/features/anomalies/domain/anomalies_repo.dart';
 import 'package:anomeye/features/auth/domain/auth_repo.dart';
 import 'package:anomeye/features/auth/domain/auth_state.dart';
 import 'package:anomeye/features/auth/presentation/auth_controller.dart';
@@ -40,4 +41,10 @@ final dioProvider = Provider<Dio>((ref) {
 
 final camerasRepoProviderOverride = Provider<CamerasRepo>((ref) {
   throw UnimplementedError('Hubungka ke FAKE/API sebelum dipakai');
+});
+
+final anomaliesRepoOverride = Provider<AnomaliesRepo>((ref) {
+  // final dio = ref.watch(dioProvider);
+  // return AnomaliesRepoApi(dio);
+  throw UnimplementedError('Sambungkan ke Fake/API saat testing');
 });

@@ -89,7 +89,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             LivePlayerScreen(cameraId: state.pathParameters['id']!),
       ),
       GoRoute(
-        path: '/anomaly/:id',
+        path: '/anomalies/:id',
         name: 'anomaly-detail',
         pageBuilder: (_, s) {
           final id = s.pathParameters['id']!;

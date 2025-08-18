@@ -2,12 +2,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../cameras/domain/cameras_repo.dart';
 import '../../cameras/domain/camera.dart';
 
-/// State daftar kamera
+// FILE INI SUDAH BENAR, JANGAN DIUBAH
 final camerasListProvider =
     StateNotifierProvider<CamerasListController, AsyncValue<List<Camera>>>(
-  // CHANGE 1: Pass the whole `ref` object
   (ref) => CamerasListController(ref),
 );
+
+class CamerasListController extends StateNotifier<AsyncValue<List<Camera>>> {
+  // Constructor ini sengaja kosong agar bisa di-load manual dari UI
+  CamerasListController(this._ref) : super(const AsyncValue.loading());
+
+  final Ref _ref;
+
+  Future<void> load() async {
+    state = const AsyncValue.loading();
+    try {
+      final repo = _ref.read(camerasRepoProvider);
+      final cameras = await repo.listCameras();
+      if (mounted) state = AsyncValue.data(cameras);
+    } catch (e, st) {
+      if (mounted) state = AsyncValue.error(e, st);
+    }
+  }
+}
+
+// ... sisa file
 
 /// State detail kamera
 final cameraDetailProvider = StateNotifierProvider.family<
@@ -15,25 +34,6 @@ final cameraDetailProvider = StateNotifierProvider.family<
   // CHANGE 2: Pass the whole `ref` object here too
   (ref, id) => CameraDetailController(ref, id),
 );
-
-class CamerasListController extends StateNotifier<AsyncValue<List<Camera>>> {
-  // CHANGE 3: The constructor now accepts `Ref`
-  CamerasListController(this._ref) : super(const AsyncValue.loading());
-  // CHANGE 4: The type is now `Ref`
-  final Ref _ref;
-
-  Future<void> load() async {
-    state = const AsyncValue.loading();
-    try {
-      // CHANGE 5: Call the `.read()` method on the `_ref` object
-      final repo = _ref.read(camerasRepoProvider);
-      final items = await repo.listCameras();
-      state = AsyncValue.data(items);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
-  }
-}
 
 class CameraDetailController extends StateNotifier<AsyncValue<Camera>> {
   // CHANGE 6: The constructor now accepts `Ref`

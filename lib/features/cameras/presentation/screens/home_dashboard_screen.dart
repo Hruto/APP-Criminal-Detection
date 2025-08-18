@@ -1,3 +1,6 @@
+import 'package:anomeye/features/anomalies/presentation/anomaly_controllers.dart';
+import 'package:anomeye/features/anomalies/presentation/widgets/animated_list_item.dart';
+import 'package:anomeye/features/anomalies/presentation/widgets/anomaly_card.dart';
 import 'package:anomeye/features/cameras/presentation/cameras_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,94 +20,101 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
   @override
   void initState() {
     super.initState();
-    // Memastikan provider dipanggil setelah frame pertama selesai di-build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // FIX: Memanggil data saat screen pertama kali dibuka
-      ref.read(camerasListProvider.notifier).load();
-      // Mengatur index navigasi (jika provider ini ada)
-      // ref.read(currentNavIndexProvider.notifier).state = 0;
+      ref.read(currentNavIndexProvider.notifier).state = 0;
+      if (ref.read(camerasListProvider) is AsyncLoading) {
+        ref.read(camerasListProvider.notifier).load();
+      }
+      if (ref.read(anomaliesListProvider(null)) is AsyncLoading) {
+        ref.read(anomaliesListProvider(null).notifier).load();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Tonton provider untuk update UI secara otomatis
-    final camerasAsyncValue = ref.watch(camerasListProvider);
+    final camerasState = ref.watch(camerasListProvider);
+    final anomaliesState = ref.watch(anomaliesListProvider(null));
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF024670),
-        centerTitle: true,
-        title: SizedBox(
-          height: 50,
-          child: Image.asset(
-            'assets/images/anomeye.png',
-            fit: BoxFit.contain,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {}, // Ganti dengan navigasi ke settings
-            icon: const Icon(Icons.settings_outlined, color: Colors.white),
-          ),
-        ],
-      ),
-      // FIX: Menggunakan .when untuk menangani semua state (loading, error, data)
-      body: camerasAsyncValue.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
-        data: (cameras) => RefreshIndicator(
-          onRefresh: () => ref.read(camerasListProvider.notifier).load(),
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              // --- Bagian Live Cameras ---
-              SectionHeader(
-                title: 'Live Cameras',
-                onSeeAll: () {},
-              ),
-              const SizedBox(height: 8),
-              GridView.builder(
-                itemCount: cameras.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.8,
-                ),
-                itemBuilder: (context, index) {
-                  final camera = cameras[index];
-                  return CameraCard(
-                    camera: camera,
-                    onTap: () => context.push('/camera/${camera.id}'),
-                  );
-                },
-              ),
-              const SizedBox(height: 24),
+      appBar: AppBar(),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await ref.read(camerasListProvider.notifier).load();
+          await ref.read(anomaliesListProvider(null).notifier).load();
+        },
+        child: camerasState.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(child: Text('Error loading cameras: $e')),
+          data: (cameras) {
+            final cameraCount = cameras.length > 4 ? 4 : cameras.length;
 
-              // --- Bagian Recent Alerts ---
-              SectionHeader(
-                title: 'Recent Alerts',
-                onSeeAll: () => context.push('/history'),
-              ),
-              const SizedBox(height: 8),
-              Card(
-                child: ListTile(
-                  leading: const Icon(Icons.warning_amber_rounded,
-                      color: Colors.orange),
-                  title: const Text('2 new anomalies detected'),
-                  subtitle: const Text('Last 1 hour'),
-                  trailing: TextButton(
-                    onPressed: () => context.push('/history'),
-                    child: const Text('Review'),
-                  ),
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                // --- Bagian Live Cameras ---
+                SectionHeader(
+                  title: 'Live Cameras',
+                  onSeeAll: () {/* Navigasi ke halaman semua kamera */},
                 ),
-              ),
-            ],
-          ),
+                GridView.builder(
+                  itemCount: cameraCount,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.8,
+                  ),
+                  itemBuilder: (context, index) {
+                    final camera = cameras[index];
+                    // ANIMASI: Bungkus CameraCard dengan AnimatedListItem
+                    return AnimatedListItem(
+                      index: index,
+                      child: CameraCard(
+                        camera: camera,
+                        onTap: () => context.push('/camera/${camera.id}'),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                // --- Bagian Recent Alerts ---
+                SectionHeader(
+                  title: 'Recent Alerts',
+                  onSeeAll: () => context.go('/history'),
+                ),
+                anomaliesState.when(
+                  loading: () => const Padding(
+                    padding: EdgeInsets.all(32.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  error: (e, _) =>
+                      Center(child: Text('Could not load alerts: $e')),
+                  data: (anomalies) {
+                    final recentAnomalies = anomalies.take(3).toList();
+                    return Column(
+                      children: List.generate(recentAnomalies.length, (index) {
+                        final anomaly = recentAnomalies[index];
+                        // ANIMASI: Bungkus AnomalyCard dengan AnimatedListItem
+                        // Index animasi dilanjutkan dari jumlah kamera agar berurutan
+                        return AnimatedListItem(
+                          index: cameraCount + index,
+                          child: AnomalyCard(
+                            item: anomaly,
+                            onTap: () =>
+                                context.push('/anomalies/${anomaly.id}'),
+                          ),
+                        );
+                      }),
+                    );
+                  },
+                ),
+              ],
+            );
+          },
         ),
       ),
       bottomNavigationBar: const AppBottomNavBar(),

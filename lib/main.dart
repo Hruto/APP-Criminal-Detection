@@ -1,3 +1,5 @@
+import 'package:anomeye/features/anomalies/data/anomalies_repo_fake.dart';
+import 'package:anomeye/features/anomalies/presentation/anomaly_controllers.dart';
 import 'package:anomeye/features/cameras/data/cameras_repo_fake.dart';
 import 'package:anomeye/features/cameras/presentation/cameras_controller.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +8,13 @@ import 'package:anomeye/app/theme/app_theme.dart';
 import 'package:anomeye/app/router.dart';
 
 void main() {
-  runApp(ProviderScope(
-      overrides: [camerasRepoProvider.overrideWithValue(CamerasRepoFake())],
-      child: const AnomEyeApp()));
+  runApp(ProviderScope(overrides: [
+    // Override provider untuk kamera
+    camerasRepoProvider.overrideWithValue(CamerasRepoFake()),
+
+    // Override provider untuk anomali
+    anomaliesRepoProvider.overrideWithValue(AnomaliesRepoFake()),
+  ], child: const AnomEyeApp()));
 }
 
 class AnomEyeApp extends ConsumerWidget {

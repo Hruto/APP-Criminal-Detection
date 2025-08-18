@@ -1,6 +1,7 @@
 import 'package:anomeye/features/anomalies/presentation/anomaly_controllers.dart';
-import 'package:flutter/material.dart';
+import 'package:anomeye/features/anomalies/presentation/widgets/anomaly_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AnomalyDetailScreen extends ConsumerWidget {
@@ -9,126 +10,124 @@ class AnomalyDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final anomalies = ref.watch(anomaliesProvider);
-    final anomaly = anomalies.firstWhere((a) => a.id == anomalyId);
+    final anomalyState = ref.watch(anomalyDetailProvider(anomalyId));
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(anomaly.label),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Thumbnail/Video container
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                alignment: Alignment.center,
-                child: anomaly.thumbnailUrl != null &&
-                        anomaly.thumbnailUrl!.isNotEmpty
-                    ? Image.network(anomaly.thumbnailUrl!)
-                    : const Icon(Icons.warning_amber_rounded,
-                        size: 64, color: Colors.amber),
-              ),
-            ),
-            const SizedBox(height: 16),
+      body: anomalyState.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
+        data: (anomaly) {
+          // Tonton juga anomali lain dari kamera yang sama
+          final relatedAnomaliesState =
+              ref.watch(anomaliesListProvider(anomaly.cameraId));
 
-            // Anomaly details
-            Text('Anomaly Details',
-                style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-
-            _buildDetailRow(context, 'Type', anomaly.label),
-            _buildDetailRow(context, 'Time',
-                DateFormat('yyyy-MM-dd HH:mm').format(anomaly.time)),
-            _buildDetailRow(context, 'Confidence',
-                '${(anomaly.score * 100).toStringAsFixed(0)}%'),
-            _buildDetailRow(context, 'Camera ID', anomaly.cameraId),
-
-            const SizedBox(height: 16),
-
-            // Action buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildActionButton(
-                  context,
-                  Icons.videocam_outlined,
-                  'View Clip',
-                  anomaly.clipUrl != null && anomaly.clipUrl!.isNotEmpty,
-                  () {
-                    // Navigate to video player or show message if no clip
-                    if (anomaly.clipUrl != null &&
-                        anomaly.clipUrl!.isNotEmpty) {
-                      // Navigate to video player
-                      // context.push('/clip/${anomaly.id}');
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Video player not implemented yet')));
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('No video clip available')));
-                    }
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back), // Or any other icon
+                  onPressed: () {
+                    Navigator.pop(
+                        context); // Navigates back to the previous route
                   },
                 ),
-                _buildActionButton(
-                  context,
-                  Icons.camera_alt_outlined,
-                  'View Camera',
-                  true,
-                  () => Navigator.pushNamed(
-                      context, '/camera/${anomaly.cameraId}'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 1. Placeholder untuk Video Player
+                      AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Center(
+                            child: Icon(Icons.play_circle_fill_rounded,
+                                color: Colors.white70, size: 64),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
 
-  Widget _buildDetailRow(BuildContext context, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              '$label:',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+                      // 2. Detail Utama Anomali
+                      Text(anomaly.anomalyType,
+                          style: textTheme.headlineMedium),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Detected on ${DateFormat.yMMMMEEEEd().add_jms().format(anomaly.reportedAt)}',
+                        style: textTheme.titleSmall
+                            ?.copyWith(color: Colors.grey[600]),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Chip(label: Text('Camera: ${anomaly.cameraId}')),
+                          const SizedBox(width: 8),
+                          Chip(
+                            label: Text(
+                                'Confidence: ${(anomaly.confidence * 100).toStringAsFixed(0)}%'),
+                            backgroundColor: Colors.blue.shade100,
+                          ),
+                        ],
+                      ),
+                      const Divider(height: 48),
+
+                      // 3. Tombol Aksi
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          TextButton.icon(
+                            icon: const Icon(Icons.share_outlined),
+                            label: const Text('Share'),
+                            onPressed: () {},
+                          ),
+                          TextButton.icon(
+                            icon:
+                                const Icon(Icons.download_for_offline_outlined),
+                            label: const Text('Download'),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                      const Divider(height: 48),
+
+                      // 4. Anomali Terkait dari Kamera yang Sama
+                      Text('More from ${anomaly.cameraId}',
+                          style: textTheme.headlineSmall),
+                      const SizedBox(height: 16),
+                      relatedAnomaliesState.when(
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (e, _) =>
+                            Text('Could not load related events: $e'),
+                        data: (related) {
+                          final otherAnomalies =
+                              related.where((a) => a.id != anomaly.id).toList();
+                          if (otherAnomalies.isEmpty) {
+                            return const Text(
+                                'No other events from this camera.');
+                          }
+                          return Column(
+                            children: otherAnomalies
+                                .take(3)
+                                .map((item) => AnomalyCard(item: item))
+                                .toList(),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionButton(BuildContext context, IconData icon, String label,
-      bool enabled, VoidCallback onPressed) {
-    return ElevatedButton.icon(
-      onPressed: enabled ? onPressed : null,
-      icon: Icon(icon),
-      label: Text(label),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF024670),
-        foregroundColor: Colors.white,
-        disabledBackgroundColor: Colors.grey.shade300,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+              )
+            ],
+          );
+        },
       ),
     );
   }

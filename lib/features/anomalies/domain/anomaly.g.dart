@@ -10,20 +10,18 @@ _$AnomalyImpl _$$AnomalyImplFromJson(Map<String, dynamic> json) =>
     _$AnomalyImpl(
       id: json['id'] as String,
       cameraId: json['cameraId'] as String,
-      time: DateTime.parse(json['time'] as String),
-      label: json['label'] as String,
-      score: (json['score'] as num).toDouble(),
-      clipUrl: json['clipUrl'] as String?,
-      thumbnailUrl: json['thumbnailUrl'] as String?,
+      anomalyType: json['anomalyType'] as String,
+      confidence: (json['confidence'] as num).toDouble(),
+      videoClipUrl: json['videoClipUrl'] as String?,
+      reportedAt: DateTime.parse(json['reportedAt'] as String),
     );
 
 Map<String, dynamic> _$$AnomalyImplToJson(_$AnomalyImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'cameraId': instance.cameraId,
-      'time': instance.time.toIso8601String(),
-      'label': instance.label,
-      'score': instance.score,
-      'clipUrl': instance.clipUrl,
-      'thumbnailUrl': instance.thumbnailUrl,
+      'anomalyType': instance.anomalyType,
+      'confidence': instance.confidence,
+      'videoClipUrl': instance.videoClipUrl,
+      'reportedAt': instance.reportedAt.toIso8601String(),
     };
