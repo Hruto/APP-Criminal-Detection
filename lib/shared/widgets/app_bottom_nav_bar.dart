@@ -32,10 +32,10 @@ class AppBottomNavBar extends ConsumerWidget {
             context.go('/history');
             break;
           case 2:
-            context.go('/settings');
+            context.go('/account');
             break;
           case 3:
-            context.go('/account');
+            context.go('/settings');
             break;
         }
       },
@@ -52,14 +52,14 @@ class AppBottomNavBar extends ConsumerWidget {
           label: 'History',
         ),
         NavigationDestination(
-          icon: Icon(Icons.settings_outlined, color: Colors.white70),
-          selectedIcon: Icon(Icons.settings, color: Colors.white),
-          label: 'Settings',
-        ),
-        NavigationDestination(
           icon: Icon(Icons.person_outlined, color: Colors.white70),
           selectedIcon: Icon(Icons.person, color: Colors.white),
           label: 'Profile',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.settings_outlined, color: Colors.white70),
+          selectedIcon: Icon(Icons.settings, color: Colors.white),
+          label: 'Settings',
         ),
       ],
     );

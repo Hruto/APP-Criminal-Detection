@@ -4,91 +4,143 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class AccountScreen extends ConsumerWidget {
+class AccountScreen extends ConsumerStatefulWidget {
   const AccountScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends ConsumerState<AccountScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Atur bottom nav bar index saat layar ini dibuka
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(currentNavIndexProvider.notifier).state = 2; // 3 untuk Profile
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Tonton state otentikasi untuk mendapatkan data user
+    final authState = ref.watch(authStateProvider);
+    final user = authState.whenOrNull(authenticated: (_, user) => user);
+
+    // Jika user tidak ditemukan (seharusnya tidak terjadi jika halaman ini terlindungi),
+    // tampilkan loading atau pesan error.
+    if (user == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+        bottomNavigationBar: AppBottomNavBar(),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // KARTU BIRU BESAR
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
-              decoration: BoxDecoration(
-                color: Color(0xFF024670),
-                borderRadius: BorderRadius.circular(28),
-              ),
-              child: Column(
-                children: [
-                  // AVATAR BULAT ABU
-                  Container(
-                    height: 140,
-                    width: 140,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFE2E5EA),
-                      shape: BoxShape.circle,
-                    ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  // Gradien untuk tampilan yang lebih modern
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF024670), Color(0xFF00639C)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  const SizedBox(height: 22),
-
-                  // FIELD PIL BULAT – USERNAME
-                  const _PillInfo(text: 'Username : ABCD'),
-                  const SizedBox(height: 12),
-
-                  // FIELD PIL BULAT – EMAIL
-                  const _PillInfo(text: 'E-mail : anomeye@gmail.com'),
-                  const SizedBox(height: 8),
-
-                  // LINK CHANGE PASSWORD? di kanan
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => context.push('/forgot-password'),
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 4),
-                      ),
-                      child: const Text(
-                        'Change password?',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    // Avatar dengan inisial nama
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                      child: Text(
+                        user.email.substring(0, 2).toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF024670),
                         ),
                       ),
                     ),
-                  ),
-
-                  const SizedBox(height: 48),
-
-                  // TOMBOL LOG OUT (PUTIH, TEKS MERAH) – PIL BULAT
-                  SizedBox(
-                    width: 140,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        ref.read(authStateProvider.notifier).signOut();
-                      },
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: const StadiumBorder(),
-                        side: BorderSide.none,
-                        textStyle: const TextStyle(fontWeight: FontWeight.w700),
+                    const SizedBox(height: 16),
+                    Text(
+                      user.email.split('@').first, // Tampilkan bagian sebelum @
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
-                      child: const Text('Log out'),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 4),
+                    Text(
+                      user.email,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white.withOpacity(0.8),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+            const SizedBox(height: 30),
 
-            const SizedBox(height: 24),
+            // --- MENU PENGATURAN ---
+            _MenuListItem(
+              title: 'Edit Profile',
+              icon: Icons.person_outline,
+              onTap: () {},
+            ),
+            _MenuListItem(
+              title: 'Change Password',
+              icon: Icons.lock_outline,
+              onTap: () {},
+            ),
+            const Divider(indent: 20, endIndent: 20, height: 30),
+            _MenuListItem(
+              title: 'Log Out',
+              icon: Icons.logout,
+              textColor: Colors.red,
+              onTap: () {
+                // Tampilkan dialog konfirmasi sebelum logout
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Log Out'),
+                    content: const Text('Are you sure you want to log out?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Cancel'),
+                      ),
+                      FilledButton(
+                        onPressed: () {
+                          ref.read(authStateProvider.notifier).signOut();
+                        },
+                        style:
+                            FilledButton.styleFrom(backgroundColor: Colors.red),
+                        child: const Text('Log Out'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -97,28 +149,33 @@ class AccountScreen extends ConsumerWidget {
   }
 }
 
-// Widget kecil untuk “input” putih bulat
-class _PillInfo extends StatelessWidget {
-  final String text;
-  const _PillInfo({required this.text});
+// Widget helper untuk membuat item menu yang konsisten
+class _MenuListItem extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final VoidCallback onTap;
+  final Color? textColor;
+
+  const _MenuListItem({
+    required this.title,
+    required this.icon,
+    required this.onTap,
+    this.textColor,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: Colors.black87,
-          fontSize: 15,
+    return ListTile(
+      leading: Icon(icon, color: textColor ?? Colors.grey[700]),
+      title: Text(
+        title,
+        style: TextStyle(
           fontWeight: FontWeight.w500,
+          color: textColor,
         ),
       ),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+      onTap: onTap,
     );
   }
 }
