@@ -2,6 +2,7 @@ import 'package:anomeye/features/auth/domain/auth_repo.dart';
 import 'package:anomeye/features/auth/domain/auth_state.dart';
 import 'package:anomeye/features/auth/presentation/auth_controller.dart';
 import 'package:anomeye/features/auth/storage/secure_token_store.dart';
+import 'package:anomeye/features/cameras/domain/cameras_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'env.dart';
@@ -35,4 +36,8 @@ final dioProvider = Provider<Dio>((ref) {
   ));
   dio.interceptors.add(AuthInterceptor(ref)); // no-op dulu
   return dio;
+});
+
+final camerasRepoProviderOverride = Provider<CamerasRepo>((ref) {
+  throw UnimplementedError('Hubungka ke FAKE/API sebelum dipakai');
 });

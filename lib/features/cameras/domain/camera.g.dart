@@ -10,8 +10,8 @@ _$CameraImpl _$$CameraImplFromJson(Map<String, dynamic> json) => _$CameraImpl(
       id: json['id'] as String,
       name: json['name'] as String,
       location: json['location'] as String?,
-      online: json['online'] as bool?,
-      activeAlerts: (json['activeAlerts'] as num?)?.toInt(),
+      online: json['online'] as bool? ?? false,
+      activeAlerts: (json['activeAlerts'] as num?)?.toInt() ?? 0,
       streamUrl: json['streamUrl'] as String?,
     );
 

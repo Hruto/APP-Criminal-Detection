@@ -20,11 +20,12 @@ Camera _$CameraFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Camera {
-  String get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String? get location => throw _privateConstructorUsedError;
-  bool? get online => throw _privateConstructorUsedError;
-  int? get activeAlerts => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError; // contoh: "cam1"
+  String get name => throw _privateConstructorUsedError; // "Lobby - Cam 1"
+  String? get location =>
+      throw _privateConstructorUsedError; // nullable -> sesuai backend
+  bool get online => throw _privateConstructorUsedError;
+  int get activeAlerts => throw _privateConstructorUsedError;
   String? get streamUrl => throw _privateConstructorUsedError;
 
   /// Serializes this Camera to a JSON map.
@@ -45,8 +46,8 @@ abstract class $CameraCopyWith<$Res> {
       {String id,
       String name,
       String? location,
-      bool? online,
-      int? activeAlerts,
+      bool online,
+      int activeAlerts,
       String? streamUrl});
 }
 
@@ -68,8 +69,8 @@ class _$CameraCopyWithImpl<$Res, $Val extends Camera>
     Object? id = null,
     Object? name = null,
     Object? location = freezed,
-    Object? online = freezed,
-    Object? activeAlerts = freezed,
+    Object? online = null,
+    Object? activeAlerts = null,
     Object? streamUrl = freezed,
   }) {
     return _then(_value.copyWith(
@@ -85,14 +86,14 @@ class _$CameraCopyWithImpl<$Res, $Val extends Camera>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String?,
-      online: freezed == online
+      online: null == online
           ? _value.online
           : online // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      activeAlerts: freezed == activeAlerts
+              as bool,
+      activeAlerts: null == activeAlerts
           ? _value.activeAlerts
           : activeAlerts // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       streamUrl: freezed == streamUrl
           ? _value.streamUrl
           : streamUrl // ignore: cast_nullable_to_non_nullable
@@ -112,8 +113,8 @@ abstract class _$$CameraImplCopyWith<$Res> implements $CameraCopyWith<$Res> {
       {String id,
       String name,
       String? location,
-      bool? online,
-      int? activeAlerts,
+      bool online,
+      int activeAlerts,
       String? streamUrl});
 }
 
@@ -133,8 +134,8 @@ class __$$CameraImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? location = freezed,
-    Object? online = freezed,
-    Object? activeAlerts = freezed,
+    Object? online = null,
+    Object? activeAlerts = null,
     Object? streamUrl = freezed,
   }) {
     return _then(_$CameraImpl(
@@ -150,14 +151,14 @@ class __$$CameraImplCopyWithImpl<$Res>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String?,
-      online: freezed == online
+      online: null == online
           ? _value.online
           : online // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      activeAlerts: freezed == activeAlerts
+              as bool,
+      activeAlerts: null == activeAlerts
           ? _value.activeAlerts
           : activeAlerts // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       streamUrl: freezed == streamUrl
           ? _value.streamUrl
           : streamUrl // ignore: cast_nullable_to_non_nullable
@@ -173,8 +174,8 @@ class _$CameraImpl implements _Camera {
       {required this.id,
       required this.name,
       this.location,
-      this.online,
-      this.activeAlerts,
+      this.online = false,
+      this.activeAlerts = 0,
       this.streamUrl});
 
   factory _$CameraImpl.fromJson(Map<String, dynamic> json) =>
@@ -182,14 +183,19 @@ class _$CameraImpl implements _Camera {
 
   @override
   final String id;
+// contoh: "cam1"
   @override
   final String name;
+// "Lobby - Cam 1"
   @override
   final String? location;
+// nullable -> sesuai backend
   @override
-  final bool? online;
+  @JsonKey()
+  final bool online;
   @override
-  final int? activeAlerts;
+  @JsonKey()
+  final int activeAlerts;
   @override
   final String? streamUrl;
 
@@ -240,22 +246,22 @@ abstract class _Camera implements Camera {
       {required final String id,
       required final String name,
       final String? location,
-      final bool? online,
-      final int? activeAlerts,
+      final bool online,
+      final int activeAlerts,
       final String? streamUrl}) = _$CameraImpl;
 
   factory _Camera.fromJson(Map<String, dynamic> json) = _$CameraImpl.fromJson;
 
   @override
-  String get id;
+  String get id; // contoh: "cam1"
   @override
-  String get name;
+  String get name; // "Lobby - Cam 1"
   @override
-  String? get location;
+  String? get location; // nullable -> sesuai backend
   @override
-  bool? get online;
+  bool get online;
   @override
-  int? get activeAlerts;
+  int get activeAlerts;
   @override
   String? get streamUrl;
 

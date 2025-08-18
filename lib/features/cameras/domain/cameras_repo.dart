@@ -1,6 +1,6 @@
 import 'camera.dart';
 
 abstract class CamerasRepo {
-  Future<List<Camera>> list();
-  Future<Camera> getById(String id);
+  Future<List<Camera>> listCameras();
+  Future<Camera> getCamera(String id);
 }
