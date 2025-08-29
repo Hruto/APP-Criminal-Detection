@@ -1,9 +1,12 @@
 import 'package:anomeye/features/anomalies/domain/anomaly.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/anomalies_repo.dart';
+import 'package:anomeye/app/di.dart';
+import 'package:anomeye/features/anomalies/data/anomalies_repo_api.dart';
 
 final anomaliesRepoProvider = Provider<AnomaliesRepo>((ref) {
-  throw UnimplementedError('Bind AnomaliesRepo (Fake/API) pada DI');
+  final dio = ref.watch(dioProvider);
+  return AnomaliesRepoApi(dio);
 });
 
 /// State list anomalies, selalu fetch data baru saat halaman dibuka.

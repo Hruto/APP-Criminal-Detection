@@ -1,8 +1,8 @@
 import 'package:anomeye/app/di.dart';
-import 'package:anomeye/features/anomalies/data/anomalies_repo_fake.dart';
+// import 'package:anomeye/features/anomalies/data/anomalies_repo_fake.dart';
 import 'package:anomeye/features/anomalies/presentation/anomaly_controllers.dart';
 import 'package:anomeye/features/auth/domain/auth_state.dart';
-import 'package:anomeye/features/cameras/data/cameras_repo_fake.dart';
+// import 'package:anomeye/features/cameras/data/cameras_repo_fake.dart';
 import 'package:anomeye/features/cameras/presentation/cameras_controller.dart';
 import 'package:anomeye/features/notifications/data/fcm_service.dart';
 import 'package:anomeye/features/notifications/presentation/fcm_controller.dart';
@@ -27,10 +27,7 @@ void main() async {
   // Background handler harus tetap di top-level
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  runApp(ProviderScope(overrides: [
-    camerasRepoProvider.overrideWithValue(CamerasRepoFake()),
-    anomaliesRepoProvider.overrideWithValue(AnomaliesRepoFake()),
-  ], child: const AnomEyeApp()));
+  runApp(const ProviderScope(child: AnomEyeApp()));
 }
 
 class AnomEyeApp extends ConsumerStatefulWidget {
