@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import '../domain/recording.dart';
+import 'package:anomeye/features/recordings/domain/recording.dart';
 
 class RecordingsApi {
   final Dio _dio;
@@ -27,7 +27,7 @@ class RecordingsApi {
         (resp.data['items'] as List<dynamic>).cast<Map<String, dynamic>>();
 
     // API tidak mengirim started_at/ended_at; derive dari key:
-    List<Recording> result = [];
+    final List<Recording> result = [];
     for (final m in items) {
       final key = m['key'] as String;
       final size = (m['size'] as num?)?.toInt() ?? 0;

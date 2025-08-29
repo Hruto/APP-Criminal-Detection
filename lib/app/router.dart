@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/recordings/presentation/recordings_screen.dart';
+import 'package:anomeye/features/recordings/presentation/recordings_screen.dart';
 
 CustomTransitionPage<T> _slidePage<T>({
   required GoRouterState state,

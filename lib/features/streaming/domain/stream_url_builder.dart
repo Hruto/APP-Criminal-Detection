@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../app/di.dart';
+import 'package:anomeye/app/di.dart';
 
 final streamUrlProvider = Provider.family<String, String>((ref, cameraId) {
   final env = ref.watch(envProvider);

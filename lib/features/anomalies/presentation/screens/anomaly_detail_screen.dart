@@ -26,7 +26,7 @@ class AnomalyDetailScreen extends ConsumerWidget {
             slivers: [
               SliverAppBar(
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back), // Or any other icon
+                  icon: const Icon(Icons.arrow_back), // Or any other icon
                   onPressed: () {
                     Navigator.pop(
                         context); // Navigates back to the previous route

@@ -1,5 +1,5 @@
-import '../domain/camera.dart';
-import '../domain/cameras_repo.dart';
+import 'package:anomeye/features/cameras/domain/camera.dart';
+import 'package:anomeye/features/cameras/domain/cameras_repo.dart';
 
 /// A fake implementation of CamerasRepo for testing and UI development.
 class CamerasRepoFake implements CamerasRepo {
@@ -60,11 +60,6 @@ class CamerasRepoFake implements CamerasRepo {
     final camera = _cameras.firstWhere((cam) => cam.id == id,
         orElse: () => throw Exception('Camera with ID $id not found.'));
 
-    if (camera != null) {
-      return camera;
-    } else {
-      // If not found, throw an exception to simulate a "404 Not Found" error.
-      throw Exception('Camera with ID $id not found.');
+    return camera;
     }
-  }
 }

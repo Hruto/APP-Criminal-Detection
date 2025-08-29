@@ -3,8 +3,8 @@ import 'package:anomeye/app/di.dart';
 import 'package:anomeye/features/auth/domain/auth_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import '../../auth/storage/secure_token_store.dart';
-import '../data/fcm_service.dart';
+import 'package:anomeye/features/auth/storage/secure_token_store.dart';
+import 'package:anomeye/features/notifications/data/fcm_service.dart';
 
 class FcmState {
   final String? token;
@@ -41,7 +41,7 @@ class FcmController extends StateNotifier<FcmState> {
   final AuthRepo _authRepo; // Tambahkan AuthRepo
   StreamSubscription<String>? _sub;
 
-  FcmController(this._service, this._store, this._authRepo) : super(FcmState());
+  FcmController(this._service, this._store, this._authRepo) : super(const FcmState());
 
   Future<void> init() async {
     // Request notification permissions

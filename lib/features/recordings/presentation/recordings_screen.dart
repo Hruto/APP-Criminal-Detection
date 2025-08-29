@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../domain/recording.dart';
-import 'recordings_controller.dart';
+import 'package:anomeye/features/recordings/domain/recording.dart';
+import 'package:anomeye/features/recordings/presentation/recordings_controller.dart';
 
 class RecordingsScreen extends ConsumerStatefulWidget {
   final String cameraId;

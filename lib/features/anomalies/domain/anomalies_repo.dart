@@ -1,4 +1,4 @@
-import 'anomaly.dart';
+import 'package:anomeye/features/anomalies/domain/anomaly.dart';
 
 abstract class AnomaliesRepo {
   /// Daftar alert terbaru (opsional filter kamera)

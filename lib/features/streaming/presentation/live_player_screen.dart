@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import '../domain/stream_url_builder.dart';
-import 'live_controller.dart';
+import 'package:anomeye/features/streaming/domain/stream_url_builder.dart';
+import 'package:anomeye/features/streaming/presentation/live_controller.dart';
 import 'package:media_kit/media_kit.dart';
 
 class LivePlayerScreen extends ConsumerStatefulWidget {

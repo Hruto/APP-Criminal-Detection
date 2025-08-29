@@ -1,5 +1,4 @@
 import 'package:anomeye/app/di.dart';
-import 'package:anomeye/features/auth/presentation/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

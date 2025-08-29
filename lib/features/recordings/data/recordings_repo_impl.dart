@@ -1,6 +1,6 @@
-import '../domain/recordings_repo.dart';
-import '../domain/recording.dart';
-import 'recordings_api.dart';
+import 'package:anomeye/features/recordings/domain/recordings_repo.dart';
+import 'package:anomeye/features/recordings/domain/recording.dart';
+import 'package:anomeye/features/recordings/data/recordings_api.dart';
 
 class RecordingsRepoImpl implements RecordingsRepo {
   final RecordingsApi api;

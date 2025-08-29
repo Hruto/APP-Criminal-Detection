@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../app/di.dart';
-import '../data/recordings_api.dart';
-import '../data/recordings_repo_impl.dart';
-import '../domain/recording.dart';
-import '../domain/recordings_repo.dart';
+import 'package:anomeye/app/di.dart';
+import 'package:anomeye/features/recordings/data/recordings_api.dart';
+import 'package:anomeye/features/recordings/data/recordings_repo_impl.dart';
+import 'package:anomeye/features/recordings/domain/recording.dart';
+import 'package:anomeye/features/recordings/domain/recordings_repo.dart';
 
 final recordingsRepoProvider = Provider<RecordingsRepo>((ref) {
   final dio = ref.watch(dioProvider);

@@ -1,4 +1,4 @@
-import 'camera.dart';
+import 'package:anomeye/features/cameras/domain/camera.dart';
 
 abstract class CamerasRepo {
   Future<List<Camera>> listCameras();

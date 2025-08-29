@@ -1,8 +1,8 @@
 import 'dart:async';
-import '../domain/auth_repo.dart';
-import '../domain/auth_state.dart';
-import '../domain/auth_user.dart';
-import '../storage/secure_token_store.dart';
+import 'package:anomeye/features/auth/domain/auth_repo.dart';
+import 'package:anomeye/features/auth/domain/auth_state.dart';
+import 'package:anomeye/features/auth/domain/auth_user.dart';
+import 'package:anomeye/features/auth/storage/secure_token_store.dart';
 
 class AuthRepoFake implements AuthRepo {
   final SecureTokenStore _store;

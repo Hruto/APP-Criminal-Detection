@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'auth_user.dart';
+import 'package:anomeye/features/auth/domain/auth_user.dart';
 part 'auth_state.freezed.dart';
 
 @freezed

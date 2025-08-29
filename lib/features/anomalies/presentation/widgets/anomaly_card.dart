@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Tambahkan package: flutter pub add intl
-import '../../domain/anomaly.dart';
+import 'package:anomeye/features/anomalies/domain/anomaly.dart';
 
 class AnomalyCard extends StatelessWidget {
   final Anomaly item;
