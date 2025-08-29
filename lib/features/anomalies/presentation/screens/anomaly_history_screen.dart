@@ -31,7 +31,18 @@ class _AnomalyHistoryScreenState extends ConsumerState<AnomalyHistoryScreen> {
     final state = ref.watch(anomaliesListProvider(widget.cameraId));
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF024670),
+          centerTitle: true,
+        title: SizedBox(
+          height: 50,
+          child: Image.asset('assets/images/anomeye.png',fit: BoxFit.contain,),
+        ),
+          actions: [
+            IconButton(onPressed: () => context.push('/settings')
+            , icon: const Icon(Icons.settings_outlined),)
+          ],
+      ),
       body: RefreshIndicator(
         onRefresh: () async =>
             ref.read(anomaliesListProvider(widget.cameraId).notifier).load(),

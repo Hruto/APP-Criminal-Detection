@@ -37,7 +37,17 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
     final anomaliesState = ref.watch(anomaliesListProvider(null));
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF024670),
+        centerTitle: true,
+        title: SizedBox(
+          height: 50,
+          child: Image.asset('assets/images/anomeye.png',fit: BoxFit.contain,),
+        ),
+        actions: [
+          IconButton(onPressed: () => context.push('/settings'), icon: const Icon(Icons.settings_outlined),),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           await ref.read(camerasListProvider.notifier).load();
