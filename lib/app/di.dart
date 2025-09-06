@@ -1,4 +1,4 @@
-// lib/app/di.dart
+﻿// lib/app/di.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 
@@ -10,7 +10,9 @@ import 'package:anomeye/features/auth/domain/auth_repo.dart';
 import 'package:anomeye/features/auth/domain/auth_state.dart';
 import 'package:anomeye/features/auth/presentation/auth_controller.dart';
 import 'package:anomeye/features/auth/storage/secure_token_store.dart';
-import 'package:anomeye/features/auth/domain/auth_repo_fake.dart';
+
+import 'package:anomeye/features/auth/data/auth_repo_impl.dart';
+import 'package:anomeye/features/auth/data/auth_api.dart';
 
 // Cameras & Anomalies (provider override point)
 import 'package:anomeye/features/cameras/domain/cameras_repo.dart';
@@ -26,7 +28,8 @@ final tokenStoreProvider = Provider<SecureTokenStore>(
 // ===== Auth =====
 final authRepoProvider = Provider<AuthRepo>((ref) {
   final store = ref.watch(tokenStoreProvider);
-  return AuthRepoFake(store); // nanti ganti ke impl API
+  final dio = ref.watch(dioProvider);
+  return AuthRepoImpl(AuthApi(dio), store);
 });
 
 final authStateProvider =
@@ -61,3 +64,5 @@ final anomaliesRepoProviderOverride = Provider<AnomaliesRepo>((ref) {
   throw UnimplementedError(
       'Sambungkan AnomaliesRepo ke Fake/API sebelum dipakai');
 });
+
+

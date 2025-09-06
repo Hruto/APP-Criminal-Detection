@@ -1,4 +1,4 @@
-import 'package:anomeye/features/auth/data/auth_api.dart';
+﻿import 'package:anomeye/features/auth/data/auth_api.dart';
 import 'package:anomeye/features/auth/domain/auth_repo.dart';
 import 'package:anomeye/features/auth/domain/auth_state.dart';
 import 'package:anomeye/features/auth/domain/auth_user.dart';
@@ -19,46 +19,40 @@ class AuthRepoImpl implements AuthRepo {
   Future<AuthState> readToken() async {
     final t = await store.read();
     if (t == null) return const AuthState.unauthenticated();
-    // TODO: optionally call /me untuk dapat user
     return AuthState.authenticated(
       token: t,
       user: const AuthUser(
-          id: 1, email: 'unknown@local', companyId: 1, role: 'user'),
+        id: 1,
+        email: 'unknown@local',
+        companyId: 1,
+        role: 'user',
+      ),
     );
   }
 
   @override
-  Future<AuthState> signIn(
-      {required String email, required String password}) async {
+  Future<AuthState> signIn({required String email, required String password}) async {
     final (token, user) = await api.signIn(email, password);
     await store.save(token);
     return AuthState.authenticated(token: token, user: user);
   }
 
   @override
-  Future<AuthState> signUp(
-      {required String email,
-      required String password,
-      required String companyId}) async {
-    // TODO: implement signUp
-    final (token, user) = await api.signUp(
-      email: email,
-      password: password,
-      companyId: companyId,
-    );
+  Future<AuthState> signUp({required String email, required String password, required String companyId}) async {
+    final (token, user) = await api.signUp(email: email, password: password, companyId: companyId);
     await store.save(token);
     return AuthState.authenticated(token: token, user: user);
   }
 
   @override
   Future<void> upsertFcmToken(String token) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    _fcm = token; // simpan lokal saja (fake)
+    _fcm = token;
+    await api.upsertFcmToken(token);
   }
 
   @override
   Future<void> deleteFcmToken() async {
-    await Future.delayed(const Duration(milliseconds: 100));
     _fcm = null;
+    await api.deleteFcmToken();
   }
 }
